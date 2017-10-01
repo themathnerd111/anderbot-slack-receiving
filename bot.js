@@ -1,11 +1,12 @@
-#!/usr/bin/env node
 console.log("loaded bot.js");
 
 const
 	lru					 = require('lru-cache'),
 	slack        = require('@slack/client'),
 	slack_events = slack.CLIENT_EVENTS.RTM,
-	rtm_events   = slack.RTM_EVENTS
+	rtm_events   = slack.RTM_EVENTS,
+	channelID		 = process.env.CHANNEL_ID,
+	botUserID    = process.env.BOT_USER_ID
 	;
 
 var RTM; // holds rtm object created in slackBot()
@@ -27,7 +28,7 @@ var slackBot = function() {
 	this.rtm.on(rtm_events.MESSAGE, function(data) {
 		console.log('new msg detected');
 		// slackBot.prototype.listening(data);
-		that.listening(data)
+		that.listening(data);
 	});
 	this.rtm.on('error', function(infraction) { console.log(infraction); });
 
@@ -50,18 +51,18 @@ slackBot.prototype.forwardMessage = function() {
 
   this.res.writeHead(200);
   // this.speak(JSON.stringify(request));
-	RTM.sendMessage('FWD: ' + request.name + ": " + request.text, "C7C446JDV");
+	RTM.sendMessage('FWD: ' + request.name + ": " + request.text, channelID);
   this.res.end();
-}
+};
 
 
 slackBot.prototype.listening = function(data) {
 	console.log('listening, heard ', data);
-	if (data.user === 'U7AG45HU1' || data.subtype === 'bot_message') {
+	if (data.user === botUserID || data.subtype === 'bot_message') {
 		console.log('ignoring bot message');
 		return;
 	}
-	this.speak(data)
+	this.speak(data);
 };
 
 slackBot.prototype.speak = function(data) {
@@ -69,21 +70,6 @@ slackBot.prototype.speak = function(data) {
 		// RTM.sendMessage('echoing ' + JSON.stringify(data), data.channel);
 };
 
-/*
-if (require.main === module) {
-	console.log("detecting whether to start bot")
-	require('dotenv').config({silent: true});
-	var assert = require('assert');
-	assert(process.env.SLACK_API_TOKEN, 'YOU MUST PROVIDE A SLACK API TOKEN IN THE ENVIRONMENT VARIABLE SLACK_API_TOKEN.');
-
-	var newBot = new slackBot();
-	newBot.initializeBot();
-} else (
-	console.log("not starting bot")
-)
-*/
-
-require('dotenv').config({silent: true});
 var assert = require('assert');
 assert(process.env.SLACK_API_TOKEN, 'YOU MUST PROVIDE A SLACK API TOKEN IN THE ENVIRONMENT VARIABLE SLACK_API_TOKEN.');
 
