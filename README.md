@@ -19,6 +19,8 @@ You will need to update your Heroku config vars
 - SLACK_API_TOKEN (you received this when creating your bot)
 - CHANNEL_ID (the ID of the channel you want the bot to post in)
 
+These vars determine what workspace and channel you bot will be active in.
+
 ## TODOs
 
 - Handle GroupMe event invites
