@@ -24,6 +24,7 @@ You will need to update your Heroku config vars
 - Handle GroupMe event invites
 - Handle GroupMe event RSVPS
 - Handle GroupMe image posts
+- Implement security (probably using IP address range)
 
 ## Notes
 
