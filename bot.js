@@ -6,14 +6,16 @@ const
 	slack_events = slack.CLIENT_EVENTS.RTM,
 	rtm_events   = slack.RTM_EVENTS,
 	channelID		 = process.env.CHANNEL_ID,
-	botUserID    = process.env.BOT_USER_ID
+	botUserID    = "" // not in use
 	;
 
 var RTM; // holds rtm object created in slackBot()
 var HTTPS = require('https');
 var request = require('request');
 
-
+/*
+	method used to create new instance of the bot
+*/
 
 var slackBot = function() {
 	if (!(this instanceof slackBot))
@@ -27,14 +29,16 @@ var slackBot = function() {
 	RTM = this.rtm;
 	this.rtm.on(rtm_events.MESSAGE, function(data) {
 		console.log('new msg detected');
-		// slackBot.prototype.listening(data);
-		that.listening(data);
+		// that.listening(data); // NOTE: for debug purposes, the bot shouldnt listen in prod
 	});
 	this.rtm.on('error', function(infraction) { console.log(infraction); });
 
 
 };
 
+/*
+	start the bot
+*/
 slackBot.prototype.initializeBot = function() {
 	this.rtm.start();
 	this.rtm.on(slack_events.RTM_CONNECTION_OPENED, function slackClientOpened()
@@ -43,6 +47,9 @@ slackBot.prototype.initializeBot = function() {
 	});
 };
 
+/*
+	forward messages received to the slack channe
+*/
 slackBot.prototype.forwardMessage = function() {
 	console.log('forwardMessage function called');
 	var request = JSON.parse(this.req.chunks[0]);
@@ -50,11 +57,24 @@ slackBot.prototype.forwardMessage = function() {
 	console.log('received request ', JSON.stringify(request));
 
   this.res.writeHead(200);
-  // this.speak(JSON.stringify(request));
 	RTM.sendMessage('FWD: ' + request.name + ": " + request.text, channelID);
+	/*
+	TODO handle other types of incoming messages
+	TODO ensure desired behavior for different types of groupme messages
+		- event invites
+		- event RSVPS
+		- link shares
+		- image shares
+	*/
   this.res.end();
 };
 
+/*
+	debug functionality. this is how the bot would respond to messages in the slack channel
+	and can be called by the slackbot method. if this is used, must update the botUserId in
+	the environmental vars / heroku config vars to prevent the bot from copying its own
+	messages
+*/
 
 slackBot.prototype.listening = function(data) {
 	console.log('listening, heard ', data);
@@ -65,14 +85,21 @@ slackBot.prototype.listening = function(data) {
 	this.speak(data);
 };
 
+/*
+	debug functionality to test the bot, this is not called by the slackbot method
+	this is how the bot would post to the slack channel
+*/
 slackBot.prototype.speak = function(data) {
-		// console.log('speaking', data.text, ' ', data);
-		// RTM.sendMessage('echoing ' + JSON.stringify(data), data.channel);
+		console.log('speaking', data.text, ' ', data);
+		RTM.sendMessage('echoing ' + JSON.stringify(data), data.channel);
 };
 
 var assert = require('assert');
 assert(process.env.SLACK_API_TOKEN, 'YOU MUST PROVIDE A SLACK API TOKEN IN THE ENVIRONMENT VARIABLE SLACK_API_TOKEN.');
 
+/*
+	create a new instance of the bot and export it
+*/
 var newBot = new slackBot();
 newBot.initializeBot();
 module.exports = newBot;
