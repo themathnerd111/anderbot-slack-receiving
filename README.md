@@ -24,7 +24,6 @@ These vars determine what workspace and channel you bot will be active in.
 ## TODOs
 
 - Implement security (probably using IP address range)
-- Fix bug where "@mentions" prevent text forwarding. Should be simple just need to look at the JSON object and update slackBot.prototype.forwardMessage function 
 
 ## Notes
 
