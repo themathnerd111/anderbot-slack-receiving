@@ -1,7 +1,6 @@
 console.log("loaded bot.js");
 
 const
-	lru					 = require('lru-cache'),
 	slack        = require('@slack/client'),
 	slack_events = slack.CLIENT_EVENTS.RTM,
 	rtm_events   = slack.RTM_EVENTS,
@@ -23,7 +22,6 @@ var slackBot = function() {
 
 	var that = this;
 
-	this.cache = lru({ max: 2000, });
 	this.web = new slack.WebClient(process.env.SLACK_API_TOKEN);
 	this.rtm = new slack.RtmClient(process.env.SLACK_API_TOKEN, {logLevel: 'warn'});
 	RTM = this.rtm;
