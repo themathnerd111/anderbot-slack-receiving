@@ -1,7 +1,6 @@
 console.log("loaded bot.js");
 
 const
-	lru					 = require('lru-cache'),
 	slack        = require('@slack/client'),
 	slack_events = slack.CLIENT_EVENTS.RTM,
 	rtm_events   = slack.RTM_EVENTS,
@@ -66,14 +65,7 @@ slackBot.prototype.forwardMessage = function() {
 			}
 		}
 	}
-	/*
-	TODO handle other types of incoming messages
-	TODO ensure desired behavior for different types of groupme messages
-		- event invites
-		- event RSVPS
-		- link shares
-		- image shares
-	*/
+
   this.res.end();
 };
 
