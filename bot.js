@@ -57,7 +57,15 @@ slackBot.prototype.forwardMessage = function() {
 	console.log('received request ', JSON.stringify(request));
 
   this.res.writeHead(200);
-	RTM.sendMessage('FWD: ' + request.name + ": " + request.text, channelID);
+	if (request.attachments.length === 0) { // if no attachments
+		RTM.sendMessage('FWD: ' + request.name + ": " + request.text, channelID);
+	} else { // if images, post URLs
+		for (var i = 0; i < request.attachments.length; i++) {
+			if(request.attachments[i].type == 'image') {
+				RTM.sendMessage('FWD: ' + request.name + ": " + request.attachments[i].url, channelID);
+			}
+		}
+	}
 	/*
 	TODO handle other types of incoming messages
 	TODO ensure desired behavior for different types of groupme messages
