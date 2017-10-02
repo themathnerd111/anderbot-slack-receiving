@@ -62,6 +62,9 @@ slackBot.prototype.forwardMessage = function() {
 			if(request.attachments[i].type == 'image') {
 				RTM.sendMessage('*GroupMe: ' + request.name + ":* " + request.attachments[i].url, channelID);
 			}
+			if(request.attachements[i].type == 'mentions') {
+				RTM.sendMessage('*GroupMe: ' + request.name + ":* " + request.text, channelID);
+			}
 		}
 	}
   this.res.end();
