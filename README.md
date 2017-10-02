@@ -23,9 +23,6 @@ These vars determine what workspace and channel you bot will be active in.
 
 ## TODOs
 
-- Handle GroupMe event invites
-- Handle GroupMe event RSVPS
-- Handle GroupMe image posts
 - Implement security (probably using IP address range)
 
 ## Notes
