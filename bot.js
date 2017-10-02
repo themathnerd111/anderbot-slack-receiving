@@ -58,7 +58,7 @@ slackBot.prototype.forwardMessage = function() {
 
   this.res.writeHead(200);
 	if (request.attachments.length === 0) { // if no attachments
-		RTM.sendMessage('FWD: ' + request.name + ": " + request.text, channelID);
+		RTM.sendMessage('*GroupMe: ' + request.name + ":* " + request.text, channelID);
 	} else { // if images, post URLs
 		for (var i = 0; i < request.attachments.length; i++) {
 			if(request.attachments[i].type == 'image') {
