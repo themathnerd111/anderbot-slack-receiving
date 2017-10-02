@@ -62,7 +62,7 @@ slackBot.prototype.forwardMessage = function() {
 	} else { // if images, post URLs
 		for (var i = 0; i < request.attachments.length; i++) {
 			if(request.attachments[i].type == 'image') {
-				RTM.sendMessage('FWD: ' + request.name + ": " + request.attachments[i].url, channelID);
+				RTM.sendMessage('*GroupMe: ' + request.name + ":* " + request.attachments[i].url, channelID);
 			}
 		}
 	}
