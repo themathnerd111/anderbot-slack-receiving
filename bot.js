@@ -1,6 +1,7 @@
 console.log("loaded bot.js");
 
 const
+	lru					 = require('lru-cache'),
 	slack        = require('@slack/client'),
 	slack_events = slack.CLIENT_EVENTS.RTM,
 	rtm_events   = slack.RTM_EVENTS,
@@ -65,7 +66,6 @@ slackBot.prototype.forwardMessage = function() {
 			}
 		}
 	}
-
   this.res.end();
 };
 
